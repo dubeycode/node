@@ -43,10 +43,10 @@ const server = http.createServer((req,res)=>{
       //################ shortcut way###############//
       const bodyobject = Object.fromEntries(params)
       console.log(bodyobject)
+      fs.writeFileSync('user.txt',JSON.stringify(bodyobject));
     });
 
 
-    fs.writeFileSync('user.txt','satyam dubey');
     // evvent to call the home page 
     res.statusCode = 302;
     res.setHeader('Location','/')
