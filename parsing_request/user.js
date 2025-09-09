@@ -1,6 +1,6 @@
 const http = require('http');
 const fs =require('fs');
-const server = http.createServer((req,res)=>{
+const userRequestHandler = ((req,res)=>{
   console.log(req.url,req.method);
 
   // first endpoint of url 
@@ -62,10 +62,5 @@ const server = http.createServer((req,res)=>{
   
 });
 
-// defind the fort number 
-const PORT= 3001;
+module.exports = userRequestHandler
 
-// server listen and give the port number dynamically
-server.listen(PORT,()=>{
-  console.log(`server is runinng at http://localhost:${PORT}`)
-});
