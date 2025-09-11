@@ -1,4 +1,3 @@
-const http = require('http');
 const fs =require('fs');
 const userRequestHandler = ((req,res)=>{
   console.log(req.url,req.method);

@@ -6,4 +6,4 @@ const server =http.createServer((req,res)=>{
 const PORT =3001;
 server.listen(PORT,()=>{
   console.log(`server is runiing on address http://localhost:${PORT}`);
-});
+}); 
