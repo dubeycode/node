@@ -1,44 +1,27 @@
+// core modules 
+const path =require('path');
+
 const express = require("express");
 
 
 const app = express();
 
+// local module 
+const user = require('./routes/user');
+const contact =require('./routes/contact-us');
+const rootDir=require("./utils/path")
+
 app.use((req, res, next) => {
-  console.log("came first middleware", req.url, req.method);
+   console.log("Handlinng", req.url, req.method);
   next();
 });
 
-// app.use("/",(req,res,next)=>{
-//   console.log("came another middleware",req.url,req.method);
-// res.send('<p>this is third middleware </p>')
-// })
+app.use(user)
+app.use(contact)
 
-app.get("/", (req, res, next) => {
-  console.log("Handlinng /for get ", req.url, req.method);
-  res.send(`<h1> welcome to coding  </h1>`);
-  next();
-});
-
-app.get("/contact-us", (req, res, next) => {
-  console.log("Handlinng /for get ", req.url, req.method);
-  res.send(`<h1>plese give us contact detils </h1>
-  <form action="/contact-us" method="POST">
-          <input type="text"
-          name="name" 
-          placeholder=" enter name">
-          <input type="email"
-          name="email" 
-          placeholder="enter email">
-          <input type="submit">
-        </form>
-        `);
-});
-
-app.post("/contact-us",(req,res,next)=>{
-  console.log("handling /contact for post ",req.url,req.method);
-  res.send(`<h1>we will reach to you shortlly </h1>`)
+app.use((req,res,next)=>{
+ res.status(404).sendFile(path.join(rootDir , 'views' ,'404.html'))
 })
-
 
 
 const port = 3000;
