@@ -32,5 +32,5 @@ app.use("/",(req,res,next)=>{
 const port = 3000
 
 app.listen(port, () => {
-  console.log(`server running onn address http://localhost:${port}`)
+  console.log(`server running on address http://localhost:${port}`)
 })
