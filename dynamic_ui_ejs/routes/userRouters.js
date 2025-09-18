@@ -13,7 +13,7 @@ const { registerHome } = require('./hostRouters');
 userRouter.get("/",(req,res,next)=>{
   console.log(registerHome)
   // res.sendFile(path.join(rootDir, 'views', 'home.html'));
-  res.render('home',{registerHome:registerHome});
+  res.render('home',{registerHome:registerHome,pageTitle:'airbnb Home'});
 });
 
 
