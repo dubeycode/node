@@ -2,12 +2,12 @@
     <nav class="container mx-auto flex justify-between items-center">
       <ul class="flex space-x-4">
         <li>
-          <a href="/" class="hover:bg-red-400 py-2 px-4 rounded transition duration-300">
-            Go to Home
+          <a href="/"   class="<%= currentPage === 'Home' ? 'bg-red-400' : 'hover:bg-red-400' %> py-2 px-4 rounded transition duration-300">
+             Home
           </a>
         </li>
         <li>
-          <a href="/host/add-home" class="hover:bg-red-400 py-2 px-4 rounded transition duration-300">
+          <a href="/host/add-home" class="<%= currentPage === 'addHome' ? 'bg-red-400' : 'hover:bg-red-400' %> py-2 px-4 rounded transition duration-300">
             Add Home
           </a>
         </li>
