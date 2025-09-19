@@ -1,7 +1,5 @@
 
-
-// array 
-const registerHome=[]
+const Home =require("../models/home")
 
 // add home logic 
 exports.getAddHome=(req,res,next)=>{
@@ -11,19 +9,22 @@ exports.getAddHome=(req,res,next)=>{
 //  addhome logic
 exports.postAddHome=(req, res, next) => {
   console.log('Home Registration successful for:', req.body);
-  registerHome.push(req.body);
+  const {housename,price,location,rating,photo}=req.body;
+
+  const home = new Home(housename,price,location,rating,photo);
+
+  home.save()
   res.render('home_Add', {pageTitle: 'Home Added Successfully', currentPage: 'homeAdded'});
 };
 
 // home page logic
 exports.getHomes=(req,res,next)=>{
-  console.log(registerHome)
-   res.render("home", {
+  Home.featchAll((homes)=>res.render("home", {
     pageTitle: "airbnb Home",
-    registeredHomes: registerHome,
+    registeredHomes: homes,
     currentPage:'Home'
-
-  });
-}
+  })
+);   
+};
 
 
