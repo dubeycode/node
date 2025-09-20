@@ -6,9 +6,12 @@ const express = require('express');
 
 
 //local modules
-const userRouter = require("./routes/userRouters")
-const {hostRouter} = require("./routes/hostRouters")
+const storeRouter = require("./routes/storeRouters")
+
+const hostRouter = require("./routes/hostRouters")
+
 const rootDir = require("./utils/pathUtil");
+
 const errorController = require("./controllers/errors");
 
 
@@ -23,7 +26,7 @@ app.set("views", path.join(__dirname, "views"));
 
 
 app.use(express.urlencoded());
-app.use(userRouter)
+app.use(storeRouter)
 app.use("/host",hostRouter)
 app.use(express.static(path.join(rootDir,'public')))
 
