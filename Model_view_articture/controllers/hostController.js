@@ -6,6 +6,17 @@ exports.getAddHome=(req,res,next)=>{
   res.render('host/addhome',{pageTitle:'Add home to airbnb' ,currentPage:'Home'});
 };
 
+
+exports.getHostHomes=(req,res,next)=>{
+  Home.featchAll((homes)=>res.render("host/host-home-list", {
+    pageTitle: "Host Home List",
+    registeredHomes: homes,
+    currentPage:'host-homes'
+  })
+);   
+};
+
+
 //  addhome logic
 exports.postAddHome=(req, res, next) => {
   console.log('Home Registration successful for:', req.body);
@@ -16,5 +27,6 @@ exports.postAddHome=(req, res, next) => {
   home.save()
   res.render('host/home_Add', {pageTitle: 'Home Added Successfully', currentPage: 'homeAdded'});
 };
+
 
 
