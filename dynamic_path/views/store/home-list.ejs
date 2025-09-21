@@ -12,7 +12,7 @@
           <% registeredHomes.forEach(home=> { %>
             <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
               <img
-                src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                src="<%= home.photo %>"
                 alt="<%= home.housename %>" class="w-full h-40 object-cover">
               <div class="p-4">
                 <h3 class="text-lg font-semibold text-gray-800 mb-2">
@@ -32,9 +32,7 @@
                   </div>
                 </div>
                 <a class="bg-blue-300 p-2" href="/homes/<%=home.id %>">Details</a>
-                <button class="bg-green-300 p-2">
-                  Book Now
-                </button>
+                  <%- include('../partials/favourite', {home: home}) %>
               </div>
             </div>
             <% }) %>

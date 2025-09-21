@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const rootDir = require('../utils/pathUtil');
+const HomeDataPath =path.join(rootDir,'data' ,'homes.json');
 
 
 module.exports = class Home{
@@ -15,7 +16,6 @@ module.exports = class Home{
     this.id=Math.random().toString();
     Home.featchAll((registerHome)=>{
     registerHome.push(this);
-    const HomeDataPath =path.join(rootDir,'data' ,'homes.json');
     fs.writeFile(HomeDataPath,JSON.stringify(registerHome),error =>{
       console.log(error)
     })
@@ -29,5 +29,13 @@ module.exports = class Home{
       // console.log("file read",err,data);
       callback(!err ? JSON.parse(data):[]);
     });
+  }
+
+  //static home  find Byid method
+  static findById(homeId,callback){
+    this.featchAll(homes=>{
+    const homeFound =  homes.find(homes =>homes.id === homeId);
+    callback(homeFound);
+    })
   }
 }

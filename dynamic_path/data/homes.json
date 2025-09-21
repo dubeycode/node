@@ -1,1 +1,3 @@
-[{"id":"1","housename":"noyo","price":"55666","location":"patna","rating":"4","photo":"https://pixabay.com/photos/furniture-living-room-modern-998265/"},{"id":"2","housename":"oyo","price":"1299","location":"mumbai","rating":"5","photo":"https://pixabay.com/photos/furniture-living-room-modern-998265/"},{"housename":"Gyan Bhawan","price":"1299","location":"patna","rating":"5","photo":"","id":"0.5280626918322273"}]
+[{"id":"1","housename":"noyo","price":"55666","location":"patna","rating":"4","photo":"/images/house1.png"},
+{"id":"2","housename":"oyo","price":"1299","location":"mumbai","rating":"5","photo":"/images/house2.png"},
+{"housename":"Gyan Bhawan","price":"1299","location":"patna","rating":"5","photo":"/images/house3.png","id":"0.5280626918322273"}]
