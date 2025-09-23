@@ -12,7 +12,7 @@
           <% registeredHomes.forEach(home=> { %>
             <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
               <img
-                src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                src="<%= home.photo %>"
                 alt="<%= home.housename %>" class="w-full h-40 object-cover">
               <div class="p-4">
                 <h3 class="text-lg font-semibold text-gray-800 mb-2">
@@ -31,12 +31,14 @@
                     </span>
                   </div>
                 </div>
-                <button class="bg-blue-500 p-2">
+                <a href="/host/edit-home/<%=home.id%>?edting=true" class="bg-blue-500 p-2">
                    Edit
-                </button>
-                <button class="bg-red-500 p-2">
+                </a>
+                <form action="/host/delet-home/<%= home.id %>" method="post">
+                   <button class="bg-red-500 p-2">
                    Delete
                 </button>
+                </form> 
               </div>
             </div>
             <% }) %>

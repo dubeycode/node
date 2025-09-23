@@ -44,6 +44,7 @@ exports.getFavouriteList = (req, res, next) => {
   });
 };
 
+// add favourites
 exports.postAddToFavourite = (req, res, next) => {
   // console.log("came to add to Favourite",req.body);
   Favourite.addToFavourite(req.body.id, (error) => {
@@ -52,6 +53,16 @@ exports.postAddToFavourite = (req, res, next) => {
     }
     res.redirect("/favourites");
   });
+};
+// remove favourites 
+exports.postRemoveFromFavourite = (req, res, next) => {
+  const homeId =req.params.homeId;
+  Favourite.deleteById(homeId,error=>{
+    if(error){
+      console.log("Error while removing frome favourite",error)
+    } 
+  })
+  res.redirect("/favourites");
 };
 
 exports.getHomeDetails = (req, res, next) => {
