@@ -56,13 +56,8 @@ module.exports = class Home{
   static deleteById(homeId, callback) {
   this.featchAll(homes => {
     homes = homes.filter(home => home.id !== homeId);
-
-    fs.writeFile(HomeDataPath, JSON.stringify(homes), (err) => {
-      if (err) {
-        console.error("Error deleting home:", err);
-        return;
-      }
-      callback();
+    fs.writeFile(HomeDataPath, JSON.stringify(homes),error => {
+     Favourite.deleteById(homeId,callback);
     });
   });
 }
