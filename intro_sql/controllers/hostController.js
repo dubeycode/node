@@ -10,10 +10,11 @@ exports.getAddHome=(req,res,next)=>{
 exports.getEditHome=(req,res,next)=>{
   const homeId =req.params.homeId;
   const editing =req.query.edting === 'true' ;
-  Home.findById(homeId,home=>{
+  Home.findById(homeId).then(([homes])=>{
+    const home=homes[0];
     if(!home){
       console.log("Home not found for edit");
-      return res.redirect("/host-home-list")
+      return res.redirect("/host/host-home-list")
     }
   console.log(homeId,editing,home);
   res.render('host/edit-home',{home:home,pageTitle:'Edit your Home' ,currentPage:'host-homes',
@@ -42,7 +43,7 @@ exports.postAddHome=(req, res, next) => {
   const home = new Home(housename,price,location,rating,photo,descraption);
 
   home.save()
-  res.redirect('host/host-home-list');
+  res.redirect('/host/host-home-list');
 };
 
 
@@ -61,10 +62,9 @@ exports.postEditHome=(req, res, next) => {
 exports.postDeleteHome=(req,res,next)=>{
   const homeId = req.params.homeId;
   console.log("came to delete home",homeId)
-  Home.deleteById(homeId,error=>{
-    if(error){
-      console.log("error while deleting",error);
-    }
- res.redirect("/host/host-home-list");
+  Home.deleteById(homeId).then(()=>{
+    res.redirect("/host/host-home-list");
+  }).catch(error=>{
+    console.log('Error while deleting',error)
   })
 };
