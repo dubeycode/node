@@ -14,16 +14,6 @@ const rootDir = require("./utils/pathUtil");
 
 const errorController = require("./controllers/errors");
 
-const db =require("./utils/databaseUtil");
-const { error } = require('console');
-
-db.execute('SELECT * FROM homes').then(result=>{
-  console.log("getting from Db",result);
-})
-.catch(error=>{
-  console.log("Error while reading handling",error);
-})
-
 
 const app = express();
 app.use(express.static("public"));

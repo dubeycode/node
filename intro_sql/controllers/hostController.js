@@ -24,12 +24,13 @@ exports.getEditHome=(req,res,next)=>{
 
 
 exports.getHostHomes=(req,res,next)=>{
-  Home.featchAll((homes)=>res.render("host/host-home-list", {
+   Home.featchAll().then(([registeredHomes])=>{
+    res.render("host/host-home-list", {
     pageTitle: "Host Home List",
-    registeredHomes: homes,
+    registeredHomes: registeredHomes,
     currentPage:'host-homes'
   })
-);   
+  });   
 };
 
 
