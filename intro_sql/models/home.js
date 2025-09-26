@@ -11,7 +11,7 @@ module.exports = class Home{
     this.id=id;
   }
   save(){
-    return db.execute(`INSERT INTO homes (housename,price,location,rating,photo,descraption) VALUES('${this.housename}',${this.price} ,'${this.location}',${this.rating}, '${this.photo}',"${this.descraption}")`)
+    return db.execute('INSERT INTO homes (housename,price,location,rating,photo,descraption) VALUES(?,?,?,?,?,?)',[this.housename, this.price,this.location,this.rating,this.photo,this.descraption])
   }
 
   static featchAll(){
