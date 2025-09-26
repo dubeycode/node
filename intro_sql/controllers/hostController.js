@@ -37,9 +37,9 @@ exports.getHostHomes=(req,res,next)=>{
 //  post add home logic
 exports.postAddHome=(req, res, next) => {
   console.log('Home Registration successful for:', req.body);
-  const {housename,price,location,rating,photo}=req.body;
+  const {housename,price,location,rating,photo,description}=req.body;
 
-  const home = new Home(housename,price,location,rating,photo);
+  const home = new Home(housename,price,location,rating,photo,description);
 
   home.save()
   res.redirect('host/host-home-list');
@@ -50,9 +50,8 @@ exports.postAddHome=(req, res, next) => {
 
 exports.postEditHome=(req, res, next) => {
   console.log('Home Registration successful for:', req.body);
-  const { id ,housename,price,location,rating,photo}=req.body;
-  const home = new Home(housename,price,location,rating,photo);
-  home.id=id;
+  const { id ,housename,price,location,rating,photo,description}=req.body;
+  const home = new Home(housename,price,location,rating,photo,description,id);
   home.save();
   res.redirect('/host/host-home-list');
 };
