@@ -1,17 +1,17 @@
 const db =require("../utils/databaseUtil");
 
 module.exports = class Home{
-  constructor(housename,price,location,rating,photo,description,id){
+  constructor(housename,price,location,rating,photo,descraption,id){
     this.housename=housename;
     this.price=price;
     this.location=location;
     this.rating=rating;
     this.photo=photo;
-    this.description=description;
+    this.descraption=descraption;
     this.id=id;
   }
   save(){
-    return db.execute(`INSERT INTO homes (housename,price,location,rating,photo,description).VALUES('${this.housename}',${this.price} ,'${this.location}',${this.rating}, '${this.photo}','${this.description}')`)
+    return db.execute(`INSERT INTO homes (housename,price,location,rating,photo,descraption) VALUES('${this.housename}',${this.price} ,'${this.location}',${this.rating}, '${this.photo}',"${this.descraption}")`)
   }
 
   static featchAll(){
