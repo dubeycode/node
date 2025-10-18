@@ -31,8 +31,15 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded());
 app.use(authRouter);
 app.use(storeRouter);
-app.use("/host",hostRouter);
+app.use("/host",(req,res,next)=>{
+  if(req.isLooggedIn){
+    next();
+  }else{
+    res.redirect("/login");
+  }
+});
 app.use(express.static(path.join(rootDir,'public')));
+
 
 
 
@@ -47,5 +54,5 @@ mongoose.connect(DB_PATH).then(()=>{
   console.log(`server is runing on http://localhost:${port}`);
   });
   }).catch(err=>{
-  console,log('Error while connectig to Mongo',err);
+  console.log('Error while connectig to Mongo',err);
 })
