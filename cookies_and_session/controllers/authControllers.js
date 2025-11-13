@@ -14,3 +14,9 @@ exports.postLogin =(req,res,next)=>{
   // res.isLoggedin =true;
   res.redirect("/");
 }
+
+exports.postlogout=(req,res,next)=>{
+  console.log("logout sucessfully");
+  res.cookie("isLoggedin",false)
+  res.redirect("/");
+}

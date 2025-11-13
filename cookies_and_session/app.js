@@ -3,7 +3,7 @@ const path =require('path');
 
 // extrnal modules
 const express = require('express');
-
+const session =require('express-session');
 
 //local modules
 const storeRouter = require("./routes/storeRouters")
@@ -29,6 +29,16 @@ app.set("views", path.join(__dirname, "views"));
 
 
 app.use(express.urlencoded());
+
+app.use(session({
+  // encrypt session data
+  secret:"DarkRoom",
+  // forces session not modified
+  resave:false,
+  //unitialzed to be save
+  saveUninitialized: true,
+
+}));
 
 app.use((req,res,next)=>{
   console.log('cookie cheek middleware',req.get('cookie'));
