@@ -29,6 +29,13 @@ app.set("views", path.join(__dirname, "views"));
 
 
 app.use(express.urlencoded());
+
+app.use((req,res,next)=>{
+  console.log('cookie cheek middleware',req.get('cookie'));
+  req.isLoggedIn =req.get('cookie')? req.get('cookie').split('=')[1]==='true':false;
+  next();
+})
+
 app.use(authRouter);
 app.use(storeRouter);
 app.use("/host",(req,res,next)=>{

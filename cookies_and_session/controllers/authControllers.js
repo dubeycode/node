@@ -10,6 +10,7 @@ exports.getLogin=(req,res,next)=>{
 
 exports.postLogin =(req,res,next)=>{
   console.log(req.body)
-  res.isLoggedin =true;
+  res.cookie("isLoggedin",true)
+  // res.isLoggedin =true;
   res.redirect("/");
 }
