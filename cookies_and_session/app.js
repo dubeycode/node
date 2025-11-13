@@ -3,7 +3,10 @@ const path =require('path');
 
 // extrnal modules
 const express = require('express');
-const session =require('express-session');
+const session = require('express-session');
+const MongoDBStore =require('connect-mongodb-session')(session);
+// Dbpath 
+const DB_PATH ="mongodb+srv://dubey_dbuser:backendPassword@completairbnb.idrzuwa.mongodb.net/airbnb?retryWrites=true&w=majority&appName=completairbnb"
 
 //local modules
 const storeRouter = require("./routes/storeRouters")
@@ -27,6 +30,11 @@ app.set("view engine", "ejs");
 // set views folder path
 app.set("views", path.join(__dirname, "views"));
 
+const store = new MongoDBStore({
+  uri:DB_PATH,
+  collection:'sessions'
+});
+
 
 app.use(express.urlencoded());
 
@@ -37,12 +45,14 @@ app.use(session({
   resave:false,
   //unitialzed to be save
   saveUninitialized: true,
+  // session save to Db
+  store:store,
 
 }));
 
 app.use((req,res,next)=>{
-  console.log('cookie cheek middleware',req.get('cookie'));
-  req.isLoggedIn =req.get('cookie')? req.get('cookie').split('=')[1]==='true':false;
+  // console.log('cookie cheek middleware',req.get('cookie'));
+  req.isLoggedIn = req.session.isLoggedin;
   next();
 })
 
@@ -63,7 +73,7 @@ app.use(express.static(path.join(rootDir,'public')));
 app.use(errorController.pagenotfound)
 
 const port =3000;
-const DB_PATH ="mongodb+srv://dubey_dbuser:backendPassword@completairbnb.idrzuwa.mongodb.net/airbnb?retryWrites=true&w=majority&appName=completairbnb"
+
 
 mongoose.connect(DB_PATH).then(()=>{
   console.log('connected to Mongo');

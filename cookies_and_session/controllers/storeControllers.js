@@ -3,6 +3,7 @@ const Home = require("../models/home");
 
 // home index
 exports.getIndex = (req, res, next) => {
+  // console.log("session Value",req.session);
   Home.find().then(registeredHomes=>{
       res.render("store/index", {
       pageTitle: "airbnb Home",

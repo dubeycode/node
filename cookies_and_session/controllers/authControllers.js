@@ -10,13 +10,16 @@ exports.getLogin=(req,res,next)=>{
 
 exports.postLogin =(req,res,next)=>{
   console.log(req.body)
-  res.cookie("isLoggedin",true)
+  req.session.isLoggedin=true;
+  // res.cookie("isLoggedin",true)
   // res.isLoggedin =true;
   res.redirect("/");
 }
 
 exports.postlogout=(req,res,next)=>{
-  console.log("logout sucessfully");
-  res.cookie("isLoggedin",false)
-  res.redirect("/");
+  // console.log("logout sucessfully");
+  req.session.destroy(()=>{
+    res.redirect("/");
+  })
+
 }
