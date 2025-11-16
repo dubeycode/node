@@ -1,92 +1,11 @@
-<header class="bg-red-500 text-white p-4 shadow-md">
-  <nav class="container mx-auto flex justify-between items-center">
-    <ul class="flex space-x-4">
-      <li>
-        <a
-          href="/"
-          class="<%= currentPage === 'index' ? 'bg-red-400' : 'hover:bg-red-400' %> py-2 px-4 rounded transition duration-300"
-        >
-          Airbnb
-        </a>
-      </li>
-
-      <% if(isLoggedIn) { %>
-
-      <li>
-        <a
-          href="/homes"
-          class="<%= currentPage === 'Home' ? 'bg-red-400' : 'hover:bg-red-400' %> py-2 px-4 rounded transition duration-300"
-        >
-          Homes-List
-        </a>
-      </li>
-
-      <li>
-        <a
-          href="/host/host-home-list"
-          class="<%= currentPage === 'hosthomes' ? 'bg-red-400' : 'hover:bg-red-400' %> py-2 px-4 rounded transition duration-300"
-        >
-          Host Home
-        </a>
-      </li>
-
-      <li>
-        <a
-          href="/host/add-home"
-          class="<%= currentPage === 'addHome' ? 'bg-red-400' : 'hover:bg-red-400' %> py-2 px-4 rounded transition duration-300"
-        >
-          Add Home
-        </a>
-      </li>
-
-      <li>
-        <a
-          href="/favourites"
-          class="<%= currentPage === 'favourites' ? 'bg-red-400' : 'hover:bg-red-400' %> py-2 px-4 rounded transition duration-300"
-        >
-          Favourites
-        </a>
-      </li>
-
-      <li>
-        <a
-          href="/bookings"
-          class="<%= currentPage === 'addHome' ? 'bg-red-400' : 'hover:bg-red-400' %> py-2 px-4 rounded transition duration-300"
-        >
-          Bookings
-        </a>
-      </li>
-
-      <% } %> <% if(!isLoggedIn){%>
-      <li>
-        <a
-          href="/signup"
-          class="hover:bg-red-400 py-2 px-4 rounded transition duration-300"
-        >
-          Singup
-        </a>
-      </li>
-      <li>
-        <a
-          href="/login"
-          class="hover:bg-red-400 py-2 px-4 rounded transition duration-300"
-        >
-          Login
-        </a>
-      </li>
-
-      <%} else {%>
-      <li>
-        <form action="/logout" method="POST">
-          <button
-            type="submit"
-            class="hover:bg-red-400 py-2 px-4 rounded transition duration-300"
-          >
-            Logout
-          </button>
-        </form>
-      </li>
-      <%}%>
-    </ul>
-  </nav>
-</header>
+ 
+ <% if (errors && errors.length > 0) { %>
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+        <strong class="font-bold">Errors:</strong>
+        <ul class="mt-2 ml-4 list-disc">
+          <% errors.forEach(err => { %>
+            <li><%= err %></li>
+          <% }) %>
+        </ul>
+      </div>
+    <% } %>

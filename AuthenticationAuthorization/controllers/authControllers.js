@@ -1,11 +1,15 @@
 const { check, validationResult } = require("express-validator");
 const User = require("../models/user");
+const bcrypt =require("bcryptjs");
 
 exports.getLogin = (req, res) => {
   res.render("auth/login", {
     pageTitle: "Login",
     currentPage: "login",
-    isLoggedIn: false
+    isLoggedIn: false,
+    errors:[],
+    oldInnput:{email:""},
+    user:{},
   });
 };
 
@@ -21,9 +25,8 @@ exports.getsignup = (req, res) => {
       lastName: "",
       email: "",
       password: "",
-      confirmPassword: "",
       userType: "",
-      terms: ""
+      
     },
     user: {},
   });
@@ -80,7 +83,7 @@ exports.postsignup = [
     if (!errors.isEmpty()) {
       return res.status(422).render("auth/signup", {
       pageTitle: "signup",
-      currentPage: "Sign Up",
+      currentPage: "SignUp",
       isLoggedIn: false,
       errors: errors.array().map(e => e.msg),
       oldInput: {
@@ -96,33 +99,54 @@ exports.postsignup = [
 });
     }
 
-    try {
-      const { firstName, lastName, email, password, userType } = req.body;
+   //  FIX: Extract values before using them
+  const { firstName, lastName, email, password, userType } = req.body;
 
-      const user = new User({
-        firstName,
-        lastName,
-        email,
-        password,
-        userType
-      });
-
-      await user.save();
+    bcrypt.hash(password ,12).then(hashedPassword=>{
+      const user =new User({firstName,lastName,email,password:hashedPassword,userType});
+      return user.save();
+    }).then(()=>{
       res.redirect("/login");
-    } catch (err) {
+    }).catch(err=>{
       return res.status(422).render("auth/signup", {
         pageTitle: "Signup",
         currentPage: "signup",
         isLoggedIn: false,
         errors: [err.message],
-        oldInput: req.body
+        oldInput: req.body,
+        user:{},
       });
+    });
     }
-  }
 ];
 
-exports.postLogin = (req, res) => {
+exports.postLogin = async (req, res) => {
+  const {email,password} =req.body;
+  const user= await User.findOne({email});
+  if(!user){
+    return res.status(422).render("auth/login",{
+      pageTitle:"Login",
+      currentPage: "login",
+      // isLoggedIn:false,
+      errors:["User dose not exixt"],
+      oldInput:req.body,
+      user:{},
+    });
+  }
+
+  const isMatch=await bcrypt.compare(password,user.password);
+  if(!isMatch){
+      return res.status(422).render("auth/login",{
+      pageTitle:"Login",
+      currentPage: "login",
+      isLoggedIn:false,
+      errors:["Invalid Password"],
+      oldInput:req.body
+    })
+  }
   req.session.isLoggedin = true;
+  req.session.user=user;
+  await req.session.save();
   res.redirect("/");
 };
 

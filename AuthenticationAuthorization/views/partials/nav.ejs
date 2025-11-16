@@ -10,32 +10,15 @@
         </a>
       </li>
 
-      <% if(isLoggedIn) { %>
-
-      <li>
+      <!-- <% if(isLoggedIn) { %>
+        <% if (user && user.type ==='guest'){%>
+    
+        <li>
         <a
           href="/homes"
           class="<%= currentPage === 'Home' ? 'bg-red-400' : 'hover:bg-red-400' %> py-2 px-4 rounded transition duration-300"
         >
           Homes-List
-        </a>
-      </li>
-
-      <li>
-        <a
-          href="/host/host-home-list"
-          class="<%= currentPage === 'hosthomes' ? 'bg-red-400' : 'hover:bg-red-400' %> py-2 px-4 rounded transition duration-300"
-        >
-          Host Home
-        </a>
-      </li>
-
-      <li>
-        <a
-          href="/host/add-home"
-          class="<%= currentPage === 'addHome' ? 'bg-red-400' : 'hover:bg-red-400' %> py-2 px-4 rounded transition duration-300"
-        >
-          Add Home
         </a>
       </li>
 
@@ -57,7 +40,56 @@
         </a>
       </li>
 
-      <% } %> <% if(!isLoggedIn){%>
+      <%} else {%>
+
+       <li>
+        <a
+          href="/host/add-home"
+          class="<%= currentPage === 'addHome' ? 'bg-red-400' : 'hover:bg-red-400' %> py-2 px-4 rounded transition duration-300"
+        >
+          Add Home
+        </a>
+      </li>
+
+      <li>
+        <a
+          href="/host/host-home-list"
+          class="<%= currentPage === 'hosthomes' ? 'bg-red-400' : 'hover:bg-red-400' %> py-2 px-4 rounded transition duration-300"
+        >
+          Host Home
+        </a>
+      </li>
+
+
+    
+
+      <%}%>
+      <%}%>
+    </ul> -->
+
+      <% if (isLoggedIn) { %>
+          <% if (user && user.userType === 'guest') { %>
+            <!-- Guest Menu -->
+            <li><a href="/host/host-home-list" class="<%= currentPage === 'hosthomes' ? 'bg-red-400' : 'hover:bg-red-400' %> py-2 px-4 rounded transition">Host Home</a></li>
+
+            <li><a href="/favourites" class="<%= currentPage === 'favourites' ? 'bg-red-400' : 'hover:bg-red-400' %> py-2 px-4 rounded transition">Favourites</a></li>
+
+            <li><a href="/bookings" class="<%= currentPage === 'bookings' ? 'bg-red-400' : 'hover:bg-red-400' %> py-2 px-4 rounded transition">Bookings</a></li>
+
+          <% } else { %>
+
+            <!-- Host Menu -->
+            <li><a href="/host/add-home" class="<%= currentPage === 'addHome' ? 'bg-red-400' : 'hover:bg-red-400' %> py-2 px-4 rounded transition">Add Home</a></li>
+
+            <li><a href="/homes" class="<%= currentPage === 'home' ? 'bg-red-400' : 'hover:bg-red-400' %> py-2 px-4 rounded transition">Homes List</a></li>
+
+          <% } %>
+
+        <% } %>
+    </ul>
+
+    <ul class="flex items-center gap-2">
+      <% if(!isLoggedIn){%>
       <li>
         <a
           href="/signup"
@@ -85,7 +117,7 @@
             Logout
           </button>
         </form>
-      </li>
+      </li>    
       <%}%>
     </ul>
   </nav>

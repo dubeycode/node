@@ -4,7 +4,8 @@ const Home =require("../models/home")
 // add home logic 
 exports.getAddHome=(req,res,next)=>{
   res.render('host/edit-home',{pageTitle:'Add home to airbnb' ,currentPage:'Home', editing:false,
-    isLoggedIn:req.isLoggedIn
+    isLoggedIn:req.isLoggedIn,
+    user:req.session.user,
   });
 };
 
@@ -19,7 +20,8 @@ exports.getEditHome=(req,res,next)=>{
     }
   console.log(homeId,editing,home);
   res.render('host/edit-home',{home:home,pageTitle:'Edit your Home' ,currentPage:'host-homes',
-  editing:editing,isLoggedIn:req.isLoggedIn
+  editing:editing,isLoggedIn:req.isLoggedIn,
+  user:req.session.user,
   });
   });
 };
@@ -31,7 +33,8 @@ exports.getHostHomes=(req,res,next)=>{
     pageTitle: "Host Home List",
     registeredHomes: registeredHomes,
     currentPage:'host-homes',
-    isLoggedIn:req.isLoggedIn
+    isLoggedIn:req.isLoggedIn,
+    user:req.session.user,
   })
   });   
 };
