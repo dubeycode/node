@@ -1,119 +1,133 @@
+const { check, validationResult } = require("express-validator");
+const User = require("../models/user");
 
-
-exports.getLogin=(req,res,next)=>{
-  res.render("auth/login",{pageTitle:"Login",
-    currentPage:"login",
-    isLoggedIn:false
+exports.getLogin = (req, res) => {
+  res.render("auth/login", {
+    pageTitle: "Login",
+    currentPage: "login",
+    isLoggedIn: false
   });
 };
 
 
-exports.postLogin =(req,res,next)=>{
-  console.log(req.body)
-  req.session.isLoggedin=true;
-  // res.cookie("isLoggedin",true)
-  // res.isLoggedin =true;
-  res.redirect("/");
-}
-
-exports.postlogout=(req,res,next)=>{
-  // console.log("logout sucessfully");
-  req.session.destroy(()=>{
-    res.redirect("/");
-  })
-
-}
-
-exports.getsignup=(req,res,next)=>{
-  res.render("auth/signup",{pageTitle:"signup",
-    currentPage:"signup",
-    isLoggedIn:false,
-    errors:[],
-    oldInput:{firstName:"" ,lastName:"" ,email:"", password:"", userType:""}
+exports.getsignup = (req, res) => {
+  res.render("auth/signup", {
+    pageTitle: "signup",
+    currentPage: "Sign Up",
+    isLoggedIn: false,
+    errors: [],
+    oldInput: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      userType: "",
+      terms: ""
+    },
+    user: {},
   });
 };
 
-const { check, validationResult } = require('express-validator');
 
+exports.postsignup = [
 
-exports.postsignup=[
-  // first name
   check("firstName")
-  .trim()
-  .isLength({min:2})
-  .withMessage('First name is required')
-  .matches(/^[a-zA-Z\s]+$/)
-  .withMessage('Last name is only contain letters'),
+    .trim()
+    .isLength({ min: 2 })
+    .withMessage("First name is required")
+    .matches(/^[A-Za-z\s]+$/)
+    .withMessage("First name must contain only letters"),
 
-  // last name
   check("lastName")
-  .matches(/^[a-zA-Z\s]*$/)
-  .withMessage('First name is only contain letters'),
+    .matches(/^[A-Za-z\s]*$/)
+    .withMessage("Last name must contain only letters"),
 
-  // email
   check("email")
-  .isEmail()
-  .withMessage("Plese enter a valid email")
-  .normalizeEmail(),
+    .isEmail()
+    .withMessage("Please enter valid email")
+    .normalizeEmail(),
 
-  //password
-  check('password')
-  .isLength({min:8})
-  .withMessage('password must be contain at least 8 characters long')
-  .matches(/[a-z]/)
-  .withMessage('password contain at least one lowercase letter')
-  .matches(/[A-Z]/)
-  .withMessage('password contain at least one uppercase letter')
-  .matches(/[!@#$%^&*(){}|<>]/)
-  .withMessage('password contain at least one special character')
-  .trim(),
-  //confirm password valdation 
-  check('confirm_password')
-  .trim()
-  .custom((value,{req })=>{
-    if(value !== req.body.password){
-      throw new Error('password do not match')
-    }
-    return true;
-  }),
-  //user Type validation 
-  check('userType')
-  .notEmpty()
-  .withMessage('User type is required')
-  .isIn(['guest','host'])
-  .withMessage('Invalid user type'),
-  //terms 
+  check("password")
+    .isLength({ min: 8 })
+    .withMessage("Password must be 8 characters long")
+    .matches(/[A-Z]/)
+    .withMessage("Must contain uppercase letter")
+    .matches(/[a-z]/)
+    .withMessage("Must contain lowercase letter")
+    .matches(/[!@#$%^&*]/)
+    .withMessage("Must contain special character"),
+
+  check("confirmPassword")
+    .custom((value, { req }) => {
+      if (value !== req.body.password) throw new Error("Passwords do not match");
+      return true;
+    }),
+
+  check("userType")
+    .notEmpty()
+    .withMessage("User type is required")
+    .isIn(["guest", "host"])
+    .withMessage("Invalid user type"),
+
   check("terms")
-  .notEmpty()
-  .withMessage("plese accept the terms and condtions")
-  .custom((value,{req})=>{
-    if(value !=="on"){
-      throw new Error("plese accept the terms and condtions")
-    }
-  }),
-  
-  (req,res,next)=>{
-    const {firstName,lastName,email,password,userType}=req.body;
+    .notEmpty()
+    .withMessage("Please accept Terms & Conditions"),
+
+  async (req, res) => {
     const errors = validationResult(req);
 
-    if(!errors.isEmpty()){
-      return res.status(422).render('auth/signup',{
-        pageTitle:'signup',
-        currentPage:'Sign Up',
-        isLoggedIn:false,
-        errors:errors.array().map(error=>error.msg),
-        oldInput:{
-          firstName,
-          lastName,
-          email,
-          password,
-          userType,
-          
-        }
+    if (!errors.isEmpty()) {
+      return res.status(422).render("auth/signup", {
+      pageTitle: "signup",
+      currentPage: "Sign Up",
+      isLoggedIn: false,
+      errors: errors.array().map(e => e.msg),
+      oldInput: {
+        firstName: req.body.firstName || "",
+        lastName: req.body.lastName || "",
+        email: req.body.email || "",
+        password: req.body.password || "",
+        confirmPassword: req.body.confirmPassword || "",
+        userType: req.body.userType || "",
+        terms: req.body.terms ? "on" : ""
+      },
+      user: {},
+});
+    }
+
+    try {
+      const { firstName, lastName, email, password, userType } = req.body;
+
+      const user = new User({
+        firstName,
+        lastName,
+        email,
+        password,
+        userType
+      });
+
+      await user.save();
+      res.redirect("/login");
+    } catch (err) {
+      return res.status(422).render("auth/signup", {
+        pageTitle: "Signup",
+        currentPage: "signup",
+        isLoggedIn: false,
+        errors: [err.message],
+        oldInput: req.body
       });
     }
-  // console.log(req.body); 
+  }
+];
+
+exports.postLogin = (req, res) => {
+  req.session.isLoggedin = true;
   res.redirect("/");
-  }]
+};
 
-
+exports.postlogout = (req, res) => {
+  req.session.destroy(() => {
+    res.redirect("/");
+  });
+};

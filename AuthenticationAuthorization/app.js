@@ -56,6 +56,7 @@ app.use((req,res,next)=>{
   next();
 })
 
+
 app.use(authRouter);
 app.use(storeRouter);
 app.use("/host",(req,res,next)=>{
@@ -67,6 +68,7 @@ app.use("/host",(req,res,next)=>{
 });
 app.use(express.static(path.join(rootDir,'public')));
 
+app.use(express.urlencoded({ extended: false }));
 
 
 

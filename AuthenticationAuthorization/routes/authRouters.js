@@ -1,16 +1,13 @@
-
-//. extrnal modules 
-const express =require('express')
-const authRouter=express.Router();
-
-//local MOdules
+const express = require('express');
+const authRouter = express.Router();
 const authControllers = require("../controllers/authControllers");
 
+authRouter.get("/login", authControllers.getLogin);
+authRouter.post("/login", authControllers.postLogin);
 
-authRouter.get("/login",authControllers.getLogin);
-authRouter.post("/login",authControllers.postLogin);
-authRouter.post("/logout",authControllers.postlogout);
-authRouter.get("/signup",authControllers.getsignup);
-authRouter.post("/signup",authControllers.postsignup);
+authRouter.get("/signup", authControllers.getsignup);
+authRouter.post("/signup", authControllers.postsignup);
 
-module.exports=authRouter 
+authRouter.post("/logout", authControllers.postlogout);
+
+module.exports = authRouter;
