@@ -1,6 +1,6 @@
-const Favourite = require("../models/favourite");
+// const Favourite = require("../models/favourite");
 const Home = require("../models/home");
-
+const User = require("../models/user");
 // home index
 exports.getIndex = (req, res, next) => {
   // console.log("session Value",req.session);
@@ -37,39 +37,48 @@ exports.getbookings = (req, res, next) => {
     })
 };
 
-exports.getFavouriteList = (req, res, next) => {
-  Favourite.find()
-  .populate('houseId')
-  .then(favourites => {
-    const favouriteHomes = favourites.map((fav)=>fav.houseId);
-      res.render("store/favourite-list", {     
-        favouriteHomes: favouriteHomes,
-        pageTitle: "My Favorites",
-        currentPage: "Favorites",
-        isLoggedIn:req.isLoggedIn,
-        user:req.session.user,
-      })
-   });
-};
-
-
-// add favourites
-exports.postAddToFavourite = (req, res, next) => {
-  const homeId = req.body.id;
-  Favourite.findOne({houseId: homeId}).then((fav) => {
-    if (fav) {
-      console.log("Already marked as favourite");
-    } else {
-      fav = new Favourite({houseId: homeId});
-      fav.save().then((result) => {
-        console.log("Fav added: ", result);
-      });
-    }
-    res.redirect("/favourites");
-  }).catch(err => {
-    console.log("Error while marking favourite: ", err);
+exports.getFavouriteList = async(req, res, next) => {
+ const userId = req.session.user._id;
+ const user = await User.findById(userId).populate('favourites');
+  res.render("store/favourite-list", {     
+    favouriteHomes: user.favourites,
+    pageTitle: "My Favorites",
+    currentPage: "Favorites",
+    isLoggedIn:req.isLoggedIn,
+    user:req.session.user,
   });
 };
+
+// add to favourites
+exports.postAddToFavourite = async (req, res, next) => {
+  try {
+    const homeId = req.body.id;
+    const userId = req.session.user._id;
+
+    const user = await User.findById(userId);
+
+    if (!user.favourites) {
+      user.favourites = [];   // create array if missing
+    }
+
+    // check if already added
+    if (user.favourites.includes(homeId)) {
+      // console.log("Already marked as favourite");
+      return res.redirect("/favourites");
+    }
+
+    user.favourites.push(homeId);
+
+    await user.save();
+    // console.log("Favourite added");
+    res.redirect("/favourites");
+
+  } catch (err) {
+    console.log("Error while marking favourite:", err);
+    res.redirect("/");
+  }
+};
+
 
 
 
