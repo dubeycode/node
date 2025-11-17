@@ -79,20 +79,16 @@ exports.postAddToFavourite = async (req, res, next) => {
   }
 };
 
-
-
-
 // remove favourites 
-exports.postRemoveFromFavourite = (req, res, next) => {
-  const homeId =req.params.homeId;
-  Favourite.findOneAndDelete({houseId:homeId})
-  .then(result=>{
-    console.log('Fav remove:',result);
-  }).catch(err =>{
-     console.log("Error while removing  favourite", err);
-  }).finally(()=>{
-      res.redirect("/favourites");
-  });
+exports.postRemoveFromFavourite = async(req, res, next) => {
+  const homeId = req.params.homeId;
+  const userId = req.session.user._id;
+  const user = await User.findById(userId);
+  if (user.favourites.includes(homeId)){
+    user.favourites =user.favourites.filter(fav=>fav != homeId);
+    await user.save();
+  }
+  res.redirect("/favourites");
 };
 
 exports.getHomeDetails = (req, res, next) => {
