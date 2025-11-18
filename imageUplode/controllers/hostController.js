@@ -1,5 +1,6 @@
 
 const Home =require("../models/home")
+const fs =require("fs");
 
 // add home logic 
 exports.getAddHome=(req,res,next)=>{
@@ -42,8 +43,15 @@ exports.getHostHomes=(req,res,next)=>{
 
 //  post add home logic
 exports.postAddHome=(req, res, next) => {
-  // console.log('Home Registration successful for:', req.body);
-  const {housename,price,location,rating,photo,descraption}=req.body;
+  const {housename,price,location,rating,descraption}=req.body;
+  // console.log(housename,price,location,rating,descraption); 
+  // console.log(req.file)
+
+  if(!req.file){
+    return  res.status(422).send("No image provided");
+  }
+
+  const photo = req.file.path;
 
   const home = new Home({housename,price,location,rating,photo,descraption});
   home.save().then(()=>{
@@ -57,14 +65,23 @@ exports.postAddHome=(req, res, next) => {
 
 exports.postEditHome=(req, res, next) => {
   console.log('Home Registration successful for:', req.body);
-  const { id ,housename,price,location,rating,photo,descraption}=req.body;
+  const { id ,housename,price,location,rating,descraption}=req.body;
   Home.findById(id).then((home)=>{
     home.housename=housename;
     home.price=price;
     home.location=location;
     home.rating=rating;
-    home.photo=photo;
     home.descraption=descraption;
+    if(req.file){
+      fs.unlink(home.photo,(err)=>{
+        if(err){
+          console.log("Error while deleting file",err);
+        }
+      })
+      home.photo=req.file.path;
+    }
+
+
     home.save().then(result=>{
     console.log("Home updated",result);
   }).catch(err=>{
